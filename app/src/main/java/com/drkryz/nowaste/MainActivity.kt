@@ -4,13 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,19 +16,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -45,6 +33,7 @@ import com.drkryz.nowaste.ui.components.main.AppHighlightHeader
 import com.drkryz.nowaste.ui.components.main.AppHighlights
 import com.drkryz.nowaste.ui.components.main.BannersNews
 import com.drkryz.nowaste.ui.components.main.SearchBar
+import com.drkryz.nowaste.ui.components.main.StickyHeader
 import com.drkryz.nowaste.ui.theme.NoWasteTheme
 
 class MainActivity : ComponentActivity() {
@@ -166,48 +155,6 @@ fun HomeScreen() {
         }
     }
 }
-
-@Composable
-fun StickyHeader() {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(10.dp, 0.dp, 10.dp, 10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-        ) {
-        // user info
-        Column {
-            // app default text
-            Text(
-                text = "Olá",
-                fontWeight = FontWeight.Light
-            )
-            // app user text split
-            Text(
-                text = "Ada Heller",
-                fontWeight = FontWeight.Bold,
-            )
-        }
-        // app name
-        Box {
-            Text(
-                text = "NO WASTE",
-                textAlign = TextAlign.Center
-            )
-        }
-
-        // box for cart icon and card items
-        Box {
-            Icon(
-                painter = painterResource(id = R.drawable.cart_24),
-                contentDescription = null
-            )
-        }
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
