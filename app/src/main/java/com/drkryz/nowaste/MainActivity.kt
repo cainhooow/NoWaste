@@ -3,50 +3,49 @@ package com.drkryz.nowaste
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFrom
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.drkryz.nowaste.ui.components.main.AppCategories
 import com.drkryz.nowaste.ui.components.main.AppHighlightHeader
 import com.drkryz.nowaste.ui.components.main.AppHighlights
-import com.drkryz.nowaste.ui.theme.Searchbar_Light_color
+import com.drkryz.nowaste.ui.components.main.BannersNews
+import com.drkryz.nowaste.ui.components.main.SearchBar
 import com.drkryz.nowaste.ui.theme.NoWasteTheme
-import com.drkryz.nowaste.ui.theme.Searchbar_dark_color
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.HorizontalPagerIndicator
-import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.yield
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,9 +61,79 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+sealed class AppScreens(val route: String, @DrawableRes val resourceId: Int) {
+    object HomePage: AppScreens("home", R.drawable.round_home_24)
+    object ShopPage: AppScreens("shop", R.drawable.round_shopbag_24)
+    object BooksMark: AppScreens("bookmarks", R.drawable.round_bookmark_24)
+    object Account: AppScreens("account", R.drawable.outline_account_circle_24)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeUI() {
+
+    val navController = rememberNavController();
+
+    val items = listOf(
+        AppScreens.HomePage,
+        AppScreens.ShopPage,
+        AppScreens.BooksMark,
+        AppScreens.Account
+    )
+
+    Scaffold(
+        bottomBar = {
+            BottomNavigation(
+                backgroundColor = MaterialTheme.colorScheme.background
+            ) {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
+                items.forEach { screen ->
+                    BottomNavigationItem(
+                        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                        onClick = {
+                                  navController.navigate(screen.route) {
+                                      popUpTo(navController.graph.findStartDestination().id) {
+                                          saveState = true
+                                      }
+
+                                      launchSingleTop = true
+                                      restoreState = true
+                                  }
+                        },
+                        icon = { Icon(painter = painterResource(id = screen.resourceId), contentDescription = null)
+                        },
+                        enabled = true,
+                        selectedContentColor = MaterialTheme.colorScheme.primary,
+                        unselectedContentColor = MaterialTheme.colorScheme.secondary
+                    )
+                }
+            }
+        }
+    ) { innerPadding ->
+        NavHost(modifier = Modifier.padding(
+            top = 0.dp,
+            bottom = innerPadding.calculateBottomPadding()
+        ), navController = navController, startDestination = "home") {
+            composable(AppScreens.HomePage.route) {
+                HomeScreen()
+            }
+            composable(AppScreens.ShopPage.route) {
+                HomeScreen()
+            }
+            composable(AppScreens.BooksMark.route) {
+                HomeScreen()
+            }
+            composable(AppScreens.Account.route) {
+                HomeScreen()
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun HomeScreen() {
     // column list
     LazyColumn(
         Modifier
@@ -81,7 +150,7 @@ fun HomeUI() {
         }
         // app banners news highlights
         item {
-            BannersUpdate()
+            BannersNews()
         }
         // app categories
         item {
@@ -136,141 +205,6 @@ fun StickyHeader() {
                 contentDescription = null
             )
         }
-    }
-}
-
-@Composable
-fun SearchBar() {
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-
-    ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(vertical = 5.dp)
-                .background(
-                    color = if (!isSystemInDarkTheme()) Searchbar_Light_color else MaterialTheme.colorScheme.onBackground,
-                    shape = RoundedCornerShape(5.dp)
-                )
-                .padding(15.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.procurar),
-                contentDescription = null,
-                Modifier
-                    .width(48.dp)
-                    .height(28.dp)
-                    .padding(end = 28.dp),
-                tint =  if (!isSystemInDarkTheme()) MaterialTheme.colorScheme.onBackground
-                else MaterialTheme.colorScheme.background
-            )
-            Text(
-                    text = "Carnes congeladas",
-                    color = if (!isSystemInDarkTheme()) MaterialTheme.colorScheme.onBackground
-                    else MaterialTheme.colorScheme.background
-                )
-        }
-    }
-}
-
-@OptIn(ExperimentalPagerApi::class)
-@Composable
-fun BannersUpdate() {
-
-    val pagerState = rememberPagerState(initialPage = 0);
-    val imageSlider = listOf(
-        painterResource(id = R.drawable.presentation_adicione_s_receita),
-        painterResource(id = R.drawable.presentation_adicione_s_receita2)
-    )
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            yield()
-            delay(2600)
-            pagerState.animateScrollToPage(
-                page = (pagerState.currentPage) % (pagerState.pageCount)
-            )
-        }
-    }
-
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .padding(top = 10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        HorizontalPager(
-            count = imageSlider.size,
-            state = pagerState,
-            modifier = Modifier.fillMaxWidth()
-        ) { page ->
-            Image(
-                painter = imageSlider[page],
-                contentDescription = "presentation_image",
-                Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-                    .clip(
-                        RoundedCornerShape(10.dp)
-                    )
-            )
-        }
-
-        HorizontalPagerIndicator(
-                pagerState = pagerState,
-                activeColor = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .padding(top = 15.dp)
-            )
-    }
-}
-
-@Composable
-fun AppCategories() {
-    LazyRow(
-        Modifier
-            .fillMaxWidth()
-            .padding(start = 15.dp, end = 15.dp, top = 28.dp),
-        horizontalArrangement = Arrangement.SpaceAround
-    ) {
-        items(4) {
-            AppCategory()
-        }
-    }
-}
-
-@Composable
-fun AppCategory() {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .padding(vertical = 5.dp)
-            .clip(
-                RoundedCornerShape(10.dp)
-            )
-            .background(MaterialTheme.colorScheme.background)
-            .padding(15.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.presentation_adicione_s_receita2),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .width(90.dp)
-                .height(90.dp)
-                .clip(
-                    RoundedCornerShape(5.dp)
-                )
-        )
-        Text(
-            text = "Cat.Name",
-            Modifier.padding(top = 5.dp)
-        )
     }
 }
 
