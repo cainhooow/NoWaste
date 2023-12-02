@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFrom
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -24,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -39,6 +41,12 @@ import com.drkryz.nowaste.ui.components.main.AppHighlights
 import com.drkryz.nowaste.ui.theme.Searchbar_Light_color
 import com.drkryz.nowaste.ui.theme.NoWasteTheme
 import com.drkryz.nowaste.ui.theme.Searchbar_dark_color
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.yield
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,10 +109,7 @@ fun StickyHeader() {
         verticalAlignment = Alignment.CenterVertically
         ) {
         // user info
-        Column(
-            Modifier
-                .padding(start = 5.dp, end = 5.dp)
-        ) {
+        Column {
             // app default text
             Text(
                 text = "Olá",
@@ -117,17 +122,15 @@ fun StickyHeader() {
             )
         }
         // app name
-        Text(
+        Box {
+            Text(
                 text = "NO WASTE",
-                textAlign = TextAlign.Center,
-
+                textAlign = TextAlign.Center
             )
+        }
+
         // box for cart icon and card items
-        Box(
-            Modifier
-                .width(50.dp),
-            contentAlignment = Alignment.Center
-        ) {
+        Box {
             Icon(
                 painter = painterResource(id = R.drawable.cart_24),
                 contentDescription = null
@@ -174,23 +177,55 @@ fun SearchBar() {
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun BannersUpdate() {
-    Box(
+
+    val pagerState = rememberPagerState(initialPage = 0);
+    val imageSlider = listOf(
+        painterResource(id = R.drawable.presentation_adicione_s_receita),
+        painterResource(id = R.drawable.presentation_adicione_s_receita2)
+    )
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            yield()
+            delay(2600)
+            pagerState.animateScrollToPage(
+                page = (pagerState.currentPage) % (pagerState.pageCount)
+            )
+        }
+    }
+
+    Column(
         Modifier
             .fillMaxWidth()
-            .padding(10.dp)
-
+            .padding(top = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.presentation_adicione_s_receita),
-            contentDescription = null,
-            Modifier
-                .fillMaxWidth()
-                .clip(
-                    RoundedCornerShape(10.dp)
-                )
-        )
+        HorizontalPager(
+            count = imageSlider.size,
+            state = pagerState,
+            modifier = Modifier.fillMaxWidth()
+        ) { page ->
+            Image(
+                painter = imageSlider[page],
+                contentDescription = "presentation_image",
+                Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+                    .clip(
+                        RoundedCornerShape(10.dp)
+                    )
+            )
+        }
+
+        HorizontalPagerIndicator(
+                pagerState = pagerState,
+                activeColor = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .padding(top = 15.dp)
+            )
     }
 }
 
