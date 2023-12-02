@@ -88,7 +88,7 @@ fun HomeUI() {
             AppHighlightHeader()
         }
         // app user highlights
-        item {
+        items(5) {
             AppHighlights()
         }
     }
@@ -100,7 +100,7 @@ fun StickyHeader() {
         Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
-            .padding(10.dp, 0.dp, 10.dp, 0.dp),
+            .padding(10.dp, 0.dp, 10.dp, 10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
         ) {
@@ -236,13 +236,15 @@ fun AppHighlightHeader() {
     Box(
         Modifier
             .padding(top = 20.dp, start = 25.dp)
-            .clip(RoundedCornerShape(
-                topStartPercent = 40,
-                topEndPercent = 40,
-                bottomStartPercent = 0,
-                bottomEndPercent = 0
-            ))
-            .background(MaterialTheme.colorScheme.onBackground)
+            .clip(
+                RoundedCornerShape(
+                    topStartPercent = 40,
+                    topEndPercent = 40,
+                    bottomStartPercent = 0,
+                    bottomEndPercent = 0
+                )
+            )
+            // .background(MaterialTheme.colorScheme.onBackground)
             .padding(
                 start = 8.dp,
                 end = 8.dp
@@ -257,9 +259,64 @@ fun AppHighlights() {
     Column(
         Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.onBackground)
+            .padding(start = 15.dp, end = 15.dp, top = 10.dp)
     ) {
-        Text(text = "Helo")
+        AppHighlight()
+    }
+}
+
+@Composable
+fun AppHighlight() {
+    Column(
+        Modifier
+            .padding(top = 15.dp, bottom = 15.dp)
+            .fillMaxWidth()
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.presentation_adicione_s_receita),
+                contentDescription = null,
+                modifier =
+                Modifier
+                    .clip(RoundedCornerShape(50.dp))
+                    .width(61.dp)
+                    .height(61.dp),
+                contentScale = ContentScale.Crop
+            )
+
+            Text(
+                text = "User.name",
+                Modifier.padding(start = 10.dp)
+                )
+        }
+
+        Column(
+            Modifier
+                .padding(top = 15.dp)
+        ) {
+            Text(text = "Bolo de chocolate com morango")
+            Text(text = "Ingredientes para o bolo:\n" +
+                    "\n" +
+                    "2 xícaras de farinha de trigo\n" +
+                    "1 xícara de cacau em pó\n" +
+                    "2 xícaras de açúcar\n" +
+                    "2 colheres de chá de fermento em pó\n" +
+                    "1 colher de chá de bicarbonato de sódio\n" +
+                    "1 colher de chá de sal\n.....")
+
+            Image(
+                painter = painterResource(id = R.drawable.presentation_adicione_s_receita),
+                contentDescription = null,
+                Modifier
+                    .padding(top = 15.dp)
+                    .fillMaxWidth()
+                    .clip(
+                        RoundedCornerShape(10.dp)
+                    )
+            )
+        }
     }
 }
 
