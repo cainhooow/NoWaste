@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,6 +23,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -81,7 +83,8 @@ fun Presentation() {
             contentScale = ContentScale.Crop,
         )
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
                         listOf(
@@ -141,7 +144,15 @@ fun Actions() {
             contentPadding = PaddingValues(20.dp),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
-            Text(text = "LOGIN", color = MaterialTheme.colorScheme.onPrimary)
+            Row(
+                Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "LOGIN", color = MaterialTheme.colorScheme.onPrimary)
+                Icon(painter = painterResource(id = R.drawable.arrow_forward_ios_24), contentDescription = null)
+            }
         }
 
         Button(
@@ -154,7 +165,15 @@ fun Actions() {
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
 
         ) {
-            Text(text = "REGISTRAR",  color = MaterialTheme.colorScheme.onPrimary)
+            Row(
+                Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "REGISTRAR",  color = MaterialTheme.colorScheme.onPrimary)
+                Icon(painter = painterResource(id = R.drawable.arrow_forward_ios_24), contentDescription = null)
+            }
         }
     }
 }
