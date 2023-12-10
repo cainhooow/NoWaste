@@ -1,5 +1,6 @@
 package com.drkryz.nowaste
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
@@ -14,7 +15,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFrom
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,11 +25,15 @@ import androidx.compose.material.ButtonColors
 import androidx.compose.material.Surface
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -47,6 +54,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.drkryz.nowaste.ui.components.initial_activity.LoginPage
+import com.drkryz.nowaste.ui.components.initial_activity.WelcomePage
 import com.drkryz.nowaste.ui.theme.NoWasteTheme
 
 class InitialActivity : ComponentActivity() {
@@ -63,130 +76,63 @@ class InitialActivity : ComponentActivity() {
 
         setContent {
             NoWasteTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    WelcomeUI()
+                Surface(modifier = Modifier.background(MaterialTheme.colorScheme.background)
+                    .fillMaxSize()
+                    .imePadding()
+                ) {
+                    Presentation()
                 }
             }
         }
     }
 }
 
+
+sealed class LoginSections(val route: String) {
+    object WelcomePage : LoginSections("welcome")
+    object LoginPage : LoginSections("login")
+}
+
+sealed class RegisterSections(val route: String) {
+    object RegisterPage : RegisterSections("register")
+    object RegisterPage_UserInfo : RegisterSections("register_UserInfo")
+    object RegisterPage_UserAddress : RegisterSections("register_UserAddress")
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Presentation() {
-    Box {
-        Image(
-            painter = painterResource(id = R.drawable.presentation_nowaste),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize()
-                .blur(20.dp),
-            contentScale = ContentScale.Crop,
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        listOf(
-                            MaterialTheme.colorScheme.surface, Color.Transparent, Color.Transparent,
-                        )
-                    )
-                ),
-            verticalArrangement = Arrangement.SpaceBetween
+    val navController = rememberNavController();
+
+    Scaffold { innerPadding ->
+        NavHost(
+            modifier = Modifier.padding(innerPadding),
+            navController = navController,
+            startDestination = LoginSections.WelcomePage.route
         ) {
-            Column(
-                modifier = Modifier.padding(top = 150.dp, start = 20.dp, end = 20.dp)
-            ) {
-                Text(
-                    text = "Olá",
-                    textAlign = TextAlign.Center,
-                    fontSize = TextUnit(60f, TextUnitType.Sp),
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Text(
-                    text = "Prepare-se para uma jornada de sabor e sustentabilidade! Bem-vindo ao nosso app que resgata alimentos e evita o desperdício.",
-                    textAlign = TextAlign.Center,
-                    fontSize = TextUnit(20f, TextUnitType.Sp),
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
+            composable(LoginSections.WelcomePage.route) {
+                WelcomePage(navController)
             }
-
-            Actions()
-        }
-    }
-}
-
-@Composable
-fun Actions() {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .padding(0.dp)
-            .background(
-                brush = Brush.verticalGradient(
-                    listOf(
-                        Color.Transparent, MaterialTheme.colorScheme.background
-                    )
-                )
-            )
-            .padding(start = 15.dp, end = 15.dp, bottom = 20.dp, top = 250.dp)
-        ,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Button(
-            onClick = { /*TODO*/ },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            shape =  RoundedCornerShape(10.dp),
-            contentPadding = PaddingValues(20.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-        ) {
-            Row(
-                Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = "LOGIN", color = MaterialTheme.colorScheme.onPrimary)
-                Icon(painter = painterResource(id = R.drawable.arrow_forward_ios_24), contentDescription = null)
+            composable(LoginSections.LoginPage.route) {
+                LoginPage(navController)
             }
-        }
-
-        Button(
-            onClick = { /*TODO*/ },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            shape =  RoundedCornerShape(10.dp),
-            contentPadding = PaddingValues(20.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-
-        ) {
-            Row(
-                Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = "REGISTRAR",  color = MaterialTheme.colorScheme.onPrimary)
-                Icon(painter = painterResource(id = R.drawable.arrow_forward_ios_24), contentDescription = null)
+            composable(RegisterSections.RegisterPage.route) {
+                WelcomePage(navController)
+            }
+            composable(RegisterSections.RegisterPage_UserInfo.route) {
+                WelcomePage(navController)
+            }
+            composable(RegisterSections.RegisterPage_UserAddress.route) {
+                WelcomePage(navController)
             }
         }
     }
-}
-
-@Composable
-fun WelcomeUI() {
-    Presentation()
 }
 
 @Preview(showBackground = true)
 @Composable
 fun WelcomePreview() {
     NoWasteTheme {
-        WelcomeUI()
+        Presentation()
     }
 }

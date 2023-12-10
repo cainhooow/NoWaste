@@ -1,4 +1,4 @@
-package com.drkryz.nowaste.ui.components.main
+package com.drkryz.nowaste.ui.components.main_activity
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

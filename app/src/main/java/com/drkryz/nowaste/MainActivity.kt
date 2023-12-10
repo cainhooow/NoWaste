@@ -28,12 +28,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.drkryz.nowaste.ui.components.main.AppCategories
-import com.drkryz.nowaste.ui.components.main.AppHighlightHeader
-import com.drkryz.nowaste.ui.components.main.AppHighlights
-import com.drkryz.nowaste.ui.components.main.BannersNews
-import com.drkryz.nowaste.ui.components.main.SearchBar
-import com.drkryz.nowaste.ui.components.main.StickyHeader
+import com.drkryz.nowaste.ui.components.main_activity.AppCategories
+import com.drkryz.nowaste.ui.components.main_activity.AppHighlightHeader
+import com.drkryz.nowaste.ui.components.main_activity.AppHighlights
+import com.drkryz.nowaste.ui.components.main_activity.BannersNews
+import com.drkryz.nowaste.ui.components.main_activity.SearchBar
+import com.drkryz.nowaste.ui.components.main_activity.StickyHeader
 import com.drkryz.nowaste.ui.theme.NoWasteTheme
 
 class MainActivity : ComponentActivity() {
@@ -53,8 +53,8 @@ class MainActivity : ComponentActivity() {
 sealed class AppScreens(val route: String, @DrawableRes val resourceId: Int) {
     object HomePage: AppScreens("home", R.drawable.round_home_24)
     object ShopPage: AppScreens("shop", R.drawable.round_shopbag_24)
-    object BooksMark: AppScreens("bookmarks", R.drawable.round_bookmark_24)
-    object Account: AppScreens("account", R.drawable.outline_account_circle_24)
+    object BooksMarkPage: AppScreens("bookmarks", R.drawable.round_bookmark_24)
+    object AccountPage: AppScreens("account", R.drawable.outline_account_circle_24)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,8 +66,8 @@ fun HomeUI() {
     val items = listOf(
         AppScreens.HomePage,
         AppScreens.ShopPage,
-        AppScreens.BooksMark,
-        AppScreens.Account
+        AppScreens.BooksMarkPage,
+        AppScreens.AccountPage
     )
 
     Scaffold(
@@ -110,10 +110,10 @@ fun HomeUI() {
             composable(AppScreens.ShopPage.route) {
                 HomeScreen()
             }
-            composable(AppScreens.BooksMark.route) {
+            composable(AppScreens.BooksMarkPage.route) {
                 HomeScreen()
             }
-            composable(AppScreens.Account.route) {
+            composable(AppScreens.AccountPage.route) {
                 HomeScreen()
             }
         }
