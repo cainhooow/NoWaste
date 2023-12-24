@@ -41,7 +41,6 @@ import androidx.compose.ui.text.style.TextAlign
 import com.drkryz.nowaste.MainActivity
 import com.drkryz.nowaste.ui.components.global.DefaultButton
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @NonRestartableComposable
 fun LoginPage(nav: NavController) {
@@ -86,15 +85,5 @@ fun LoginPage(nav: NavController) {
                 LoginPageActions()
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginPage() {
-    val nav = rememberNavController()
-
-    NoWasteTheme {
-        LoginPage(nav = nav)
     }
 }

@@ -28,6 +28,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.drkryz.nowaste.ui.components.main_activity.AccountPage
 import com.drkryz.nowaste.ui.components.main_activity.AppCategories
 import com.drkryz.nowaste.ui.components.main_activity.AppHighlightHeader
 import com.drkryz.nowaste.ui.components.main_activity.AppHighlights
@@ -103,7 +104,7 @@ fun HomeUI() {
         NavHost(modifier = Modifier.padding(
             top = 0.dp,
             bottom = innerPadding.calculateBottomPadding()
-        ), navController = navController, startDestination = "home") {
+        ), navController = navController, startDestination = AppScreens.AccountPage.route) {
             composable(AppScreens.HomePage.route) {
                 HomeScreen()
             }
@@ -114,7 +115,7 @@ fun HomeUI() {
                 HomeScreen()
             }
             composable(AppScreens.AccountPage.route) {
-                HomeScreen()
+                AccountPage()
             }
         }
     }

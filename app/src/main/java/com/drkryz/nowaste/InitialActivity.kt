@@ -1,64 +1,31 @@
 package com.drkryz.nowaste
 
-import android.content.Intent
+import android.app.Activity
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFrom
-import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.Surface
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ColorMatrix
-import androidx.compose.ui.graphics.LinearGradientShader
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
-import androidx.compose.ui.unit.dp
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.drkryz.nowaste.ui.components.initial_activity.LoginPage
+import com.drkryz.nowaste.ui.components.initial_activity.RegisterAddresses
+import com.drkryz.nowaste.ui.components.initial_activity.RegisterPage
+import com.drkryz.nowaste.ui.components.initial_activity.RegisterUser
 import com.drkryz.nowaste.ui.components.initial_activity.WelcomePage
 import com.drkryz.nowaste.ui.theme.NoWasteTheme
 
@@ -76,9 +43,11 @@ class InitialActivity : ComponentActivity() {
 
         setContent {
             NoWasteTheme {
-                Surface(modifier = Modifier.background(MaterialTheme.colorScheme.background)
-                    .fillMaxSize()
-                    .imePadding()
+                Surface(
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.background)
+                        .fillMaxSize()
+                        .imePadding()
                 ) {
                     Presentation()
                 }
@@ -117,13 +86,13 @@ fun Presentation() {
                 LoginPage(navController)
             }
             composable(RegisterSections.RegisterPage.route) {
-                WelcomePage(navController)
+                RegisterPage(navController)
             }
             composable(RegisterSections.RegisterPage_UserInfo.route) {
-                WelcomePage(navController)
+                RegisterUser(navController)
             }
             composable(RegisterSections.RegisterPage_UserAddress.route) {
-                WelcomePage(navController)
+                RegisterAddresses(navController)
             }
         }
     }
