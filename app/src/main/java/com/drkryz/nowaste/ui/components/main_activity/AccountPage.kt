@@ -83,7 +83,7 @@ fun AccountPage() {
                     Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(5.dp))
+                        .border(BorderStroke(1.dp, MaterialTheme.colorScheme.primary), shape = RoundedCornerShape(5.dp))
                         .clickable {
                         }
                         .padding(20.dp),

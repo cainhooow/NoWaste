@@ -1,5 +1,6 @@
 package com.drkryz.nowaste.ui.components.global
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -38,10 +39,7 @@ fun DefaultButton(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = inner_text, color = MaterialTheme.colorScheme.onPrimary)
-            Icon(
-                painter = painterResource(id = R.drawable.arrow_forward_ios_24),
-                contentDescription = null
-            )
+            Icon(painter = painterResource(id = R.drawable.arrow_forward_ios_24), contentDescription = null)
         }
     }
 }

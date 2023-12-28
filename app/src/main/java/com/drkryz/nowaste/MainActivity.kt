@@ -33,6 +33,7 @@ import com.drkryz.nowaste.ui.components.main_activity.AppCategories
 import com.drkryz.nowaste.ui.components.main_activity.AppHighlightHeader
 import com.drkryz.nowaste.ui.components.main_activity.AppHighlights
 import com.drkryz.nowaste.ui.components.main_activity.BannersNews
+import com.drkryz.nowaste.ui.components.main_activity.MarketplacePage
 import com.drkryz.nowaste.ui.components.main_activity.SearchBar
 import com.drkryz.nowaste.ui.components.main_activity.StickyHeader
 import com.drkryz.nowaste.ui.theme.NoWasteTheme
@@ -104,12 +105,12 @@ fun HomeUI() {
         NavHost(modifier = Modifier.padding(
             top = 0.dp,
             bottom = innerPadding.calculateBottomPadding()
-        ), navController = navController, startDestination = AppScreens.AccountPage.route) {
+        ), navController = navController, startDestination = AppScreens.HomePage.route) {
             composable(AppScreens.HomePage.route) {
                 HomeScreen()
             }
             composable(AppScreens.ShopPage.route) {
-                HomeScreen()
+                MarketplacePage()
             }
             composable(AppScreens.BooksMarkPage.route) {
                 HomeScreen()
@@ -152,7 +153,7 @@ fun HomeScreen() {
         }
         // app user highlights
         items(5) {
-            AppHighlights()
+            AppHighlights(false)
         }
     }
 }

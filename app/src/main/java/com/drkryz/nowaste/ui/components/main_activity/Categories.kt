@@ -3,7 +3,9 @@ package com.drkryz.nowaste.ui.components.main_activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,6 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -23,31 +28,40 @@ import com.drkryz.nowaste.R
 
 @Composable
 fun AppCategory() {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .padding(vertical = 5.dp)
-            .clip(
-                RoundedCornerShape(10.dp)
-            )
-            .background(MaterialTheme.colorScheme.background)
-            .padding(15.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = Modifier
+            .padding(5.dp)
+            .width(100.dp)
+            .height(100.dp)
+            .clip(RoundedCornerShape(5.dp)),
+        contentAlignment = Alignment.BottomStart
     ) {
+        // Imagem
         Image(
             painter = painterResource(id = R.drawable.presentation_adicione_s_receita2),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .width(90.dp)
-                .height(90.dp)
-                .clip(
-                    RoundedCornerShape(5.dp)
+                .fillMaxSize()
+        )
+
+        // Gradiente
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Black)),
+                    shape = RoundedCornerShape(5.dp)
                 )
         )
+
+        // Texto
         Text(
             text = "Cat.Name",
-            Modifier.padding(top = 5.dp)
+            modifier = Modifier
+                .padding(8.dp)
+                .align(Alignment.BottomStart),
+            color = Color.White // Cor do texto
         )
     }
 }

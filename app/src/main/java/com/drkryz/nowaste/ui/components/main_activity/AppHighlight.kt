@@ -1,16 +1,23 @@
 package com.drkryz.nowaste.ui.components.main_activity
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +31,9 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.drkryz.nowaste.HomeUI
+import com.drkryz.nowaste.MainActivity
 import com.drkryz.nowaste.R
+import com.drkryz.nowaste.ui.components.global.DefaultButton
 import com.drkryz.nowaste.ui.theme.Light_background_color
 import com.drkryz.nowaste.ui.theme.NoWasteTheme
 
@@ -37,10 +46,10 @@ fun AppHighlightHeader() {
                 color = if (!isSystemInDarkTheme()) Light_background_color
                 else MaterialTheme.colorScheme.onBackground,
                 shape = RoundedCornerShape(
-                topStartPercent = 40,
-                topEndPercent = 40,
-                bottomStartPercent = 0,
-                bottomEndPercent = 0
+                    topStartPercent = 40,
+                    topEndPercent = 40,
+                    bottomStartPercent = 0,
+                    bottomEndPercent = 0
                 )
             )
             // .background(MaterialTheme.colorScheme.onBackground)
@@ -58,19 +67,19 @@ fun AppHighlightHeader() {
 }
 
 @Composable
-fun AppHighlights() {
+fun AppHighlights(enableBuy: Boolean) {
     Column(
         Modifier
             .fillMaxWidth()
             .padding(start = 15.dp, end = 15.dp)
     ) {
-        AppCardPost()
+        AppCardPost(enableBuy)
     }
 }
 
 
 @Composable
-fun AppCardPost() {
+fun AppCardPost(enableBuy: Boolean) {
     Column(
         Modifier
             .padding(bottom = 30.dp)
@@ -83,7 +92,36 @@ fun AppCardPost() {
             .fillMaxWidth()
     ) {
         CardMeta()
-        CardBody()
+        if (enableBuy) {
+            CardBody() {
+                Button(
+                    onClick = {},
+                    modifier = Modifier.padding(top = 10.dp),
+                    shape = RoundedCornerShape(10.dp),
+                    contentPadding = PaddingValues(20.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                    )
+                ) {
+                    Row(
+                        Modifier
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.addtocart_rounded_24),
+                            contentDescription = null
+                        )
+                        Text(
+                            text = "ADICIONAR AO CARRINHO",
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                    }
+                }
+
+            }
+        } else CardBody() {}
     }
 }
 
@@ -124,7 +162,7 @@ fun CardMeta() {
 }
 
 @Composable
-fun CardBody() {
+fun CardBody(content: @Composable() (ColumnScope.() -> Unit)?) {
     Column(
         Modifier
             .padding(top = 15.dp)
@@ -162,6 +200,10 @@ fun CardBody() {
                     RoundedCornerShape(10.dp)
                 )
         )
+
+        if (content !== null) {
+            content.invoke(this)
+        }
     }
 }
 
