@@ -72,8 +72,21 @@ fun BlogViewPage() {
                         .fillMaxSize(),
                     contentScale = ContentScale.Crop,
                 )
-
             }
+
+            Column(
+                modifier = Modifier
+                    .height(250.dp)
+                    .fillMaxWidth()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            listOf(
+                                MaterialTheme.colorScheme.surface, Color.Transparent, Color.Transparent,
+                            )
+                        )
+                    ),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {}
         }
 
         if (scrollableState.isScrollInProgress) {
@@ -90,7 +103,6 @@ fun BlogViewPage() {
                 .verticalScroll(scrollableState)
                 .padding(start = 15.dp, end = 15.dp, top = if (topMetaVisible) { 10.dp } else { 45.dp }, bottom = 65.dp)
         ) {
-
 
             Column(
                 modifier = Modifier
