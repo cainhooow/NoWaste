@@ -24,13 +24,6 @@ fun MarketplacePage() {
         item {
             SearchBar()
         }
-        // app banners news highlights
-        //
-        // item {
-        //    BannersNews()
-        //
-        // }
-        // app categories
         item {
             AppCategories()
         }
@@ -40,7 +33,7 @@ fun MarketplacePage() {
         }
         // app user highlights
         items(5) {
-            AppHighlights(true)
+            AppHighlights(true, click = {})
         }
     }
 }

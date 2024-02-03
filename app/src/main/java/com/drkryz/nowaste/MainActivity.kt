@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -33,6 +34,7 @@ import com.drkryz.nowaste.ui.components.main_activity.AppCategories
 import com.drkryz.nowaste.ui.components.main_activity.AppHighlightHeader
 import com.drkryz.nowaste.ui.components.main_activity.AppHighlights
 import com.drkryz.nowaste.ui.components.main_activity.BannersNews
+import com.drkryz.nowaste.ui.components.main_activity.BlogViewPage
 import com.drkryz.nowaste.ui.components.main_activity.MarketplacePage
 import com.drkryz.nowaste.ui.components.main_activity.SearchBar
 import com.drkryz.nowaste.ui.components.main_activity.StickyHeader
@@ -57,6 +59,7 @@ sealed class AppScreens(val route: String, @DrawableRes val resourceId: Int) {
     object ShopPage: AppScreens("shop", R.drawable.round_shopbag_24)
     object BooksMarkPage: AppScreens("bookmarks", R.drawable.round_bookmark_24)
     object AccountPage: AppScreens("account", R.drawable.outline_account_circle_24)
+    object BlogViewPage: AppScreens("blogview", R.drawable.outline_notification_24)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -107,16 +110,20 @@ fun HomeUI() {
             bottom = innerPadding.calculateBottomPadding()
         ), navController = navController, startDestination = AppScreens.HomePage.route) {
             composable(AppScreens.HomePage.route) {
-                HomeScreen()
+                HomeScreen(navController)
             }
             composable(AppScreens.ShopPage.route) {
                 MarketplacePage()
             }
             composable(AppScreens.BooksMarkPage.route) {
-                HomeScreen()
+                HomeScreen(navController)
             }
             composable(AppScreens.AccountPage.route) {
                 AccountPage()
+            }
+
+            composable(AppScreens.BlogViewPage.route) {
+                BlogViewPage()
             }
         }
     }
@@ -124,7 +131,7 @@ fun HomeUI() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     // column list
     LazyColumn(
         Modifier
@@ -153,7 +160,16 @@ fun HomeScreen() {
         }
         // app user highlights
         items(5) {
-            AppHighlights(false)
+            AppHighlights(false, click = {
+                navController.navigate(AppScreens.BlogViewPage.route) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            })
         }
     }
 }

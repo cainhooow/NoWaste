@@ -3,6 +3,7 @@ package com.drkryz.nowaste.ui.components.main_activity
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -67,19 +68,18 @@ fun AppHighlightHeader() {
 }
 
 @Composable
-fun AppHighlights(enableBuy: Boolean) {
+fun AppHighlights(enableBuy: Boolean, click: () -> Unit) {
     Column(
         Modifier
             .fillMaxWidth()
             .padding(start = 15.dp, end = 15.dp)
     ) {
-        AppCardPost(enableBuy)
+        AppCardPost(enableBuy, click)
     }
 }
 
-
 @Composable
-fun AppCardPost(enableBuy: Boolean) {
+fun AppCardPost(enableBuy: Boolean, click: () -> Unit) {
     Column(
         Modifier
             .padding(bottom = 30.dp)
@@ -90,13 +90,14 @@ fun AppCardPost(enableBuy: Boolean) {
             )
             .padding(start = 10.dp, end = 10.dp, top = 15.dp, bottom = 15.dp)
             .fillMaxWidth()
+            .clickable { click.invoke() }
     ) {
         CardMeta()
         if (enableBuy) {
             CardBody() {
                 Button(
                     onClick = {},
-                    modifier = Modifier.padding(top = 10.dp),
+                    modifier = Modifier.padding(top = 18.dp),
                     shape = RoundedCornerShape(10.dp),
                     contentPadding = PaddingValues(20.dp),
                     colors = ButtonDefaults.buttonColors(
