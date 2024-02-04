@@ -1,8 +1,10 @@
 package com.drkryz.nowaste.ui.components.main_activity
 
 import android.content.Intent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -87,6 +89,12 @@ fun AppCardPost(enableBuy: Boolean, click: () -> Unit) {
                 color = if (!isSystemInDarkTheme()) Light_background_color
                 else MaterialTheme.colorScheme.onBackground,
                 shape = RoundedCornerShape(10.dp)
+            )
+            .border(
+                border = BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.onBackground.copy(0.5f)
+                ), shape = RoundedCornerShape(10.dp)
             )
             .padding(start = 10.dp, end = 10.dp, top = 15.dp, bottom = 15.dp)
             .fillMaxWidth()

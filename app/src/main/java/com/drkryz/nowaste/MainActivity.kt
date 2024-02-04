@@ -123,7 +123,7 @@ fun HomeUI() {
             }
 
             composable(AppScreens.BlogViewPage.route) {
-                BlogViewPage()
+                BlogViewPage(navController)
             }
         }
     }

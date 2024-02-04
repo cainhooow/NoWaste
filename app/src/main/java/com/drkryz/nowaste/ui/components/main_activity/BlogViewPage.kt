@@ -20,11 +20,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.materialIcon
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +37,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -48,10 +52,13 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.dynamicanimation.animation.FlingAnimation
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import com.drkryz.nowaste.AppScreens
 import com.drkryz.nowaste.R
 
 @Composable
-fun BlogViewPage() {
+fun BlogViewPage(navController: NavController) {
     val scrollableState = rememberScrollState();
     var lastScrollPosition by remember { mutableStateOf(0) }
     var topMetaVisible by remember {
@@ -68,8 +75,7 @@ fun BlogViewPage() {
                 Image(
                     painter = painterResource(id = R.drawable.presentation_nowaste),
                     contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop,
                 )
             }
@@ -81,12 +87,45 @@ fun BlogViewPage() {
                     .background(
                         brush = Brush.verticalGradient(
                             listOf(
-                                MaterialTheme.colorScheme.surface, Color.Transparent, Color.Transparent,
+                                MaterialTheme.colorScheme.surface,
+                                Color.Transparent,
+                                Color.Transparent,
                             )
                         )
-                    ),
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {}
+                    ), verticalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .background(
+                            brush = Brush.verticalGradient(
+                                listOf(
+                                    MaterialTheme.colorScheme.surface,
+                                    MaterialTheme.colorScheme.surface.copy(0.8f),
+                                    Color.Transparent
+                                )
+                            )
+                        )
+                        .padding(start = 8.dp, top = 5.dp, bottom = 5.dp)
+                ) {
+                    IconButton(
+                        onClick = {
+                            navController.navigate(AppScreens.HomePage.route) {
+                                popUpTo(navController.graph.findStartDestination().id)
+                            }
+                        }
+                    ) {
+                        Row {
+                            Icon(
+                                painter = painterResource(id = R.drawable.round_arrow_back_ios_24),
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    }
+                }
+            }
         }
 
         if (scrollableState.isScrollInProgress) {
@@ -101,27 +140,30 @@ fun BlogViewPage() {
             Modifier
                 .fillMaxWidth()
                 .verticalScroll(scrollableState)
-                .padding(start = 15.dp, end = 15.dp, top = if (topMetaVisible) { 10.dp } else { 45.dp }, bottom = 65.dp)
+                .padding(
+                    start = 20.dp, end = 20.dp, top = if (topMetaVisible) {
+                        10.dp
+                    } else {
+                        45.dp
+                    }, bottom = 65.dp
+                )
         ) {
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .apply {
-                        if (!topMetaVisible) {
-                            padding(top = 20.dp)
-                        }
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .apply {
+                    if (!topMetaVisible) {
+                        padding(top = 20.dp)
                     }
-                    .background(
-                        brush = Brush.verticalGradient(
-                            listOf(
-                                MaterialTheme.colorScheme.surface,
-                                Color.Transparent,
-                            )
+                }
+                .background(
+                    brush = Brush.verticalGradient(
+                        listOf(
+                            MaterialTheme.colorScheme.surface,
+                            Color.Transparent,
                         )
-                    ),
-                verticalArrangement = Arrangement.Bottom
-            ) {
+                    )
+                ), verticalArrangement = Arrangement.Bottom) {
                 Row(
                     Modifier
                         .fillMaxWidth()
@@ -132,8 +174,7 @@ fun BlogViewPage() {
                         )
                         .border(
                             border = BorderStroke(
-                                1.dp,
-                                MaterialTheme.colorScheme.onBackground.copy(0.5f)
+                                1.dp, MaterialTheme.colorScheme.onBackground.copy(0.5f)
                             ), shape = RoundedCornerShape(5.dp)
                         )
                         .padding(start = 8.dp, top = 5.dp, bottom = 5.dp, end = 5.dp),
@@ -142,8 +183,7 @@ fun BlogViewPage() {
                     Image(
                         painter = painterResource(id = R.drawable.presentation_adicione_s_receita),
                         contentDescription = null,
-                        modifier =
-                        Modifier
+                        modifier = Modifier
                             .clip(RoundedCornerShape(50.dp))
                             .width(51.dp)
                             .height(51.dp),
@@ -170,7 +210,6 @@ fun BlogViewPage() {
                         )
                     }
                 }
-
             }
 
             Text(
@@ -181,20 +220,24 @@ fun BlogViewPage() {
                 fontSize = TextUnit(25f, TextUnitType.Sp),
                 fontWeight = FontWeight.Bold
             )
+
             Text(
-                modifier = Modifier.padding(top = 30.dp), text = "Where does it come from?\n" +
-                        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.\n" +
-                        "\n" +
-                        "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham. Where does it come from?\n" +
-                        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.\n" +
-                        "\n" +
-                        "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham. Where does it come from?\n" +
-                        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.\n" +
-                        "\n" +
-                        "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham."
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 5.dp),
+                text = "5 minutos de leitura",
+                fontSize = TextUnit(16f, TextUnitType.Sp),
+                fontWeight = FontWeight.Bold,
+                color = if (!isSystemInDarkTheme()) MaterialTheme.colorScheme.onBackground.copy(0.4f)
+                else MaterialTheme.colorScheme.onSurface.copy(0.4f)
+            )
+
+
+            Text(
+                modifier = Modifier.padding(top = 30.dp),
+                text = "Where does it come from?\n" + "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.\n" + "\n" + "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham. Where does it come from?\n" + "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.\n" + "\n" + "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham. Where does it come from?\n" + "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.\n" + "\n" + "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.",
+                fontSize = TextUnit(17f, TextUnitType.Sp)
             )
         }
-
-
     }
 };
