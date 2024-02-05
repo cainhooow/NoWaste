@@ -7,10 +7,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MarketplacePage() {
+fun MarketplacePage(navController: NavController) {
     LazyColumn(
         Modifier
             .fillMaxWidth()
@@ -18,7 +19,7 @@ fun MarketplacePage() {
     ) {
         // app header
         stickyHeader {
-            StickyHeader()
+            StickyHeader(navController)
         }
         // app searchable button "open new activity search"
         item {

@@ -36,6 +36,7 @@ import com.drkryz.nowaste.ui.components.main_activity.AppHighlights
 import com.drkryz.nowaste.ui.components.main_activity.BannersNews
 import com.drkryz.nowaste.ui.components.main_activity.BlogViewPage
 import com.drkryz.nowaste.ui.components.main_activity.MarketplacePage
+import com.drkryz.nowaste.ui.components.main_activity.NotificationsViewPage
 import com.drkryz.nowaste.ui.components.main_activity.SearchBar
 import com.drkryz.nowaste.ui.components.main_activity.StickyHeader
 import com.drkryz.nowaste.ui.theme.NoWasteTheme
@@ -60,6 +61,7 @@ sealed class AppScreens(val route: String, @DrawableRes val resourceId: Int) {
     object BooksMarkPage: AppScreens("bookmarks", R.drawable.round_bookmark_24)
     object AccountPage: AppScreens("account", R.drawable.outline_account_circle_24)
     object BlogViewPage: AppScreens("blogview", R.drawable.outline_notification_24)
+    object NotificationsViewPage: AppScreens("notifications", R.drawable.outline_notification_24)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -113,7 +115,7 @@ fun HomeUI() {
                 HomeScreen(navController)
             }
             composable(AppScreens.ShopPage.route) {
-                MarketplacePage()
+                MarketplacePage(navController)
             }
             composable(AppScreens.BooksMarkPage.route) {
                 HomeScreen(navController)
@@ -124,6 +126,10 @@ fun HomeUI() {
 
             composable(AppScreens.BlogViewPage.route) {
                 BlogViewPage(navController)
+            }
+
+            composable(AppScreens.NotificationsViewPage.route) {
+                NotificationsViewPage(navController = navController)
             }
         }
     }
@@ -140,7 +146,7 @@ fun HomeScreen(navController: NavController) {
     ) {
         // app header
         stickyHeader {
-            StickyHeader()
+            StickyHeader(navController)
         }
         // app searchable button "open new activity search"
         item {
